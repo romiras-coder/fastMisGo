@@ -1,20 +1,19 @@
 package helper
 
 import (
+	configuration "api/config"
 	model "api/models"
 	"errors"
 	"fmt"
-	"strconv"
 	"time"
 
-	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 )
 
-var privateKey = []byte(os.Getenv("JWT_PRIVATE_KEY"))
+var cfg = configuration.ReadConfig()
 
 func ValidateJWT(context *gin.Context) error {
 	token, err := getToken(context)
@@ -49,7 +48,7 @@ func getToken(context *gin.Context) (*jwt.Token, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return privateKey, nil
+		return cfg.ApiServiceOptions.JWTPrivKey, nil
 	})
 	return token, err
 
@@ -65,7 +64,8 @@ func getTokenFromRequest(context *gin.Context) string {
 }
 
 func GenerateJWT(user model.User) (string, error) {
-	tokenTTL, _ := strconv.Atoi(os.Getenv("TOKEN_TTL"))
+	tokenTTL := cfg.ApiServiceOptions.TokenTTL
+	privateKey := []byte(cfg.ApiServiceOptions.JWTPrivKey)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":  user.ID,
 		"iat": time.Now().Unix(),

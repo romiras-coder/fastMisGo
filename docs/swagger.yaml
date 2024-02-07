@@ -1,0 +1,47 @@
+basePath: /api/v1
+definitions:
+  model.AuthenticationInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+host: localhost:8899
+info:
+  contact:
+    email: test@test.ru
+    name: Moskotlinov Roman
+    url: https://github.com/romiras-coder
+  description: Тестовая API-шка для поиграться с go postgres и прочими штуками
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://блаблабла
+  title: Test API in GO
+  version: "1.0"
+paths:
+  /auth/register:
+    post:
+      description: Takes a book JSON and store in DB. Return saved JSON.
+      parameters:
+      - description: Book JSON
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/model.AuthenticationInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.AuthenticationInput'
+      summary: Store a new book
+      tags:
+      - auth
+swagger: "2.0"

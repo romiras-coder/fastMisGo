@@ -1,7 +1,7 @@
 package model
 
 import (
-	database "api/db"
+	"api/database"
 	"html"
 	"strings"
 
