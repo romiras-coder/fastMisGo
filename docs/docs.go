@@ -26,7 +26,7 @@ const docTemplate = `{
     "paths": {
         "/auth/register": {
             "post": {
-                "description": "Takes a book JSON and store in DB. Return saved JSON.",
+                "description": "Takes a user JSON and store in DB. Return saved JSON.",
                 "produces": [
                     "application/json"
                 ],
@@ -36,12 +36,12 @@ const docTemplate = `{
                 "summary": "Register a new user",
                 "parameters": [
                     {
-                        "description": "Book JSON",
-                        "name": "book",
+                        "description": "User JSON",
+                        "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.AuthenticationInput"
+                            "$ref": "#/definitions/model.RegisterInput"
                         }
                     }
                 ],
@@ -57,13 +57,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "model.AuthenticationInput": {
+        "model.RegisterInput": {
             "type": "object",
             "required": [
+                "email",
                 "password",
                 "username"
             ],
             "properties": {
+                "email": {
+                    "type": "string"
+                },
                 "password": {
                     "type": "string"
                 },
@@ -74,7 +78,15 @@ const docTemplate = `{
         },
         "model.UserResp": {
             "type": "object",
+            "required": [
+                "email",
+                "userId",
+                "userName"
+            ],
             "properties": {
+                "email": {
+                    "type": "string"
+                },
                 "userId": {
                     "type": "integer"
                 },

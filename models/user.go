@@ -9,15 +9,12 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserResp struct {
-	UserId   int
-	UserName string
-}
 type User struct {
-	gorm.Model
 	Username string `gorm:"size:255;not null;unique" json:"username"`
 	Password string `gorm:"size:255;not null;" json:"password"`
+	Email    string `gorm:"size:255;not null;" json:"email"`
 	Entries  []Entry
+	gorm.Model
 }
 
 func (user *User) Save() (*User, error) {

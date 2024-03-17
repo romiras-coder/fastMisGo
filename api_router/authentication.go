@@ -3,7 +3,6 @@ package api_router
 import (
 	"api/helper"
 	model "api/models"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,14 +10,14 @@ import (
 
 // PostUser             godoc
 // @Summary      Register a new user
-// @Description  Takes a book JSON and store in DB. Return saved JSON.
+// @Description  Takes a user JSON and store in DB. Return saved JSON.
 // @Tags         auth
 // @Produce      json
-// @Param        book  body      model.AuthenticationInput  true  "Book JSON"
+// @Param        user  body      model.RegisterInput  true  "User JSON"
 // @Success      201   {object}  model.UserResp
 // @Router       /auth/register [post]
 func Register(context *gin.Context) {
-	var input model.AuthenticationInput
+	var input model.RegisterInput
 
 	if err := context.ShouldBindJSON(&input); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -27,10 +26,10 @@ func Register(context *gin.Context) {
 	user := model.User{
 		Username: input.Username,
 		Password: input.Password,
+		Email:    input.Email,
 	}
 
 	findedUser, findedUserErr := model.FindUserByUsername(user.Username)
-	fmt.Printf("%+v\n", findedUser)
 
 	if findedUser.Username != "" {
 		context.JSON(http.StatusUnprocessableEntity, gin.H{"error": "user already exist"})
@@ -42,6 +41,7 @@ func Register(context *gin.Context) {
 		respUser := model.UserResp{
 			UserId:   int(savedUser.ID),
 			UserName: savedUser.Username,
+			Email:    savedUser.Email,
 		}
 		context.JSON(http.StatusCreated, respUser)
 	}
