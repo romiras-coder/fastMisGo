@@ -33,7 +33,7 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "summary": "Store a new book",
+                "summary": "Register a new user",
                 "parameters": [
                     {
                         "description": "Book JSON",

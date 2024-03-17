@@ -4,11 +4,10 @@ import (
 	"api/api_router"
 	configuration "api/config"
 	"api/database"
+	_ "api/docs"
 	model "api/models"
 	"fmt"
 	"net/http"
-
-	_ "api/docs"
 
 	"github.com/gin-gonic/gin"
 

@@ -3,13 +3,14 @@ package api_router
 import (
 	"api/helper"
 	model "api/models"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 // PostUser             godoc
-// @Summary      Store a new book
+// @Summary      Register a new user
 // @Description  Takes a book JSON and store in DB. Return saved JSON.
 // @Tags         auth
 // @Produce      json
@@ -27,12 +28,25 @@ func Register(context *gin.Context) {
 		Username: input.Username,
 		Password: input.Password,
 	}
-	savedUser, err := user.Save()
 
-	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	findedUser, findedUserErr := model.FindUserByUsername(user.Username)
+	fmt.Printf("%+v\n", findedUser)
+
+	if findedUser.Username != "" {
+		context.JSON(http.StatusUnprocessableEntity, gin.H{"error": "user already exist"})
+	} else {
+		savedUser, err := user.Save()
+		if err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
+
+		context.JSON(http.StatusCreated, gin.H{"user": savedUser})
 	}
-	context.JSON(http.StatusCreated, gin.H{"user": savedUser})
+
+	if findedUserErr != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": findedUserErr.Error()})
+	}
+
 }
 
 func AddEntry(context *gin.Context) {

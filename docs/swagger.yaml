@@ -41,7 +41,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.AuthenticationInput'
-      summary: Store a new book
+      summary: Register a new user
       tags:
       - auth
 swagger: "2.0"
