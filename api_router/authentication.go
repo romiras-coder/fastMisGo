@@ -15,7 +15,7 @@ import (
 // @Tags         auth
 // @Produce      json
 // @Param        book  body      model.AuthenticationInput  true  "Book JSON"
-// @Success      200   {object}  model.AuthenticationInput
+// @Success      201   {object}  model.UserResp
 // @Router       /auth/register [post]
 func Register(context *gin.Context) {
 	var input model.AuthenticationInput
@@ -39,8 +39,11 @@ func Register(context *gin.Context) {
 		if err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		}
-
-		context.JSON(http.StatusCreated, gin.H{"user": savedUser})
+		respUser := model.UserResp{
+			UserId:   int(savedUser.ID),
+			UserName: savedUser.Username,
+		}
+		context.JSON(http.StatusCreated, respUser)
 	}
 
 	if findedUserErr != nil {

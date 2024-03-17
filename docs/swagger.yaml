@@ -10,6 +10,13 @@ definitions:
     - password
     - username
     type: object
+  model.UserResp:
+    properties:
+      userId:
+        type: integer
+      userName:
+        type: string
+    type: object
 host: localhost:8899
 info:
   contact:
@@ -37,10 +44,10 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
-            $ref: '#/definitions/model.AuthenticationInput'
+            $ref: '#/definitions/model.UserResp'
       summary: Register a new user
       tags:
       - auth

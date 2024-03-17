@@ -9,6 +9,10 @@ import (
 	"gorm.io/gorm"
 )
 
+type UserResp struct {
+	UserId   int
+	UserName string
+}
 type User struct {
 	gorm.Model
 	Username string `gorm:"size:255;not null;unique" json:"username"`
