@@ -1,5 +1,20 @@
 basePath: /api/v1
 definitions:
+  model.AuthenticationInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  model.JwtResp:
+    properties:
+      jwt:
+        type: string
+    type: object
   model.RegisterInput:
     properties:
       email:
@@ -40,6 +55,26 @@ info:
   title: Test API in GO
   version: "1.0"
 paths:
+  /auth/login:
+    post:
+      description: Takes a user JSON and store in DB. Return saved JSON.
+      parameters:
+      - description: User JSON
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.AuthenticationInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.JwtResp'
+      summary: Login
+      tags:
+      - auth
   /auth/register:
     post:
       description: Takes a user JSON and store in DB. Return saved JSON.

@@ -40,22 +40,33 @@ func (user *User) BeforeSave(*gorm.DB) error {
 func (user *User) ValidatePassword(password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 }
+
 func FindUserByUsername(username string) (User, error) {
 	var user User
-	err := database.Database.Where("username=?", username).Find(&user).Error
+	result := database.Database.Last(&user, "username = ?", username)
 
-	if err != nil {
+	if result.Error == gorm.ErrRecordNotFound {
 		return user, nil
 	}
-	return user, nil
+	return user, result.Error
 }
 
-func FindUserById(id uint) (User, error) {
+func FindUserByEmail(email string) (User, error) {
 	var user User
-	err := database.Database.Preload("Entries").Where("ID=?", id).Find(&user).Error
+	result := database.Database.Last(&user, "email = ?", email)
 
-	if err != nil {
-		return User{}, err
+	if result.Error == gorm.ErrRecordNotFound {
+		return user, nil
 	}
-	return user, nil
+	return user, result.Error
+}
+
+func FindUserById(userId uint) (User, error) {
+	var user User
+	result := database.Database.Find(&user, "id = ?", userId)
+
+	if result.Error == gorm.ErrRecordNotFound {
+		return user, nil
+	}
+	return user, result.Error
 }

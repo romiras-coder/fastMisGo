@@ -16,3 +16,7 @@ type UserResp struct {
 	UserName string `json:"userName" binding:"required"`
 	Email    string `json:"email" binding:"required"`
 }
+
+type JwtResp struct {
+	Jwt string `json:"jwt"`
+}
